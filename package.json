@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "install:all": "npm install && npm --prefix frontend/host install && npm --prefix frontend/remote1 install && npm --prefix frontend/remote2 install",
+    "install:all": "npm install && npm --prefix frontend/registry install && npm --prefix frontend/host install && npm --prefix frontend/remote1 install && npm --prefix frontend/remote2 install",
     "dev": "concurrently -n \"remote1,remote2,host\" -c \"cyan,magenta,green\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/host run dev\"",
-    "dev:all": "concurrently -n \"remote1,remote2,host,svc-a,svc-b\" -c \"cyan,magenta,green,yellow,blue\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/host run dev\" \"./gradlew -p backend/service-a bootRun\" \"./gradlew -p backend/service-b bootRun\"",
-    "dev:all:win": "concurrently -n \"remote1,remote2,host,svc-a,svc-b\" -c \"cyan,magenta,green,yellow,blue\" \"cmd /c npm --prefix frontend/remote1 run dev\" \"cmd /c npm --prefix frontend/remote2 run dev\" \"cmd /c npm --prefix frontend/host run dev\" \"cmd /c gradlew.bat -p backend/service-a bootRun\" \"cmd /c gradlew.bat -p backend/service-b bootRun\"",
-    "stop": "npx kill-port 3000 3001 3002 8081 8082"
+    "dev:all": "concurrently -n \"registry,remote1,remote2,host,svc-a,svc-b\" -c \"white,cyan,magenta,green,yellow,blue\" \"npm --prefix frontend/registry run dev\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/host run dev\" \"./gradlew -p backend/service-a bootRun\" \"./gradlew -p backend/service-b bootRun\"",
+    "dev:all:win": "concurrently -n \"registry,remote1,remote2,host,svc-a,svc-b\" -c \"white,cyan,magenta,green,yellow,blue\" \"cmd /c npm --prefix frontend/registry run dev\" \"cmd /c npm --prefix frontend/remote1 run dev\" \"cmd /c npm --prefix frontend/remote2 run dev\" \"cmd /c npm --prefix frontend/host run dev\" \"cmd /c gradlew.bat -p backend/service-a bootRun\" \"cmd /c gradlew.bat -p backend/service-b bootRun\"",
+    "stop": "npx kill-port 3000 3001 3002 3003 8081 8082"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

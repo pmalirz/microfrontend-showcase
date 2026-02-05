@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const Remote1Widget = React.lazy(() => import("remote1/Widget"));
 const Remote2Widget = React.lazy(() => import("remote2/Widget"));
@@ -21,16 +22,20 @@ export default function App() {
 
       <div style={boxStyle}>
         <h2>Remote 1</h2>
-        <Suspense fallback={<div>Loading Remote 1...</div>}>
-          <Remote1Widget />
-        </Suspense>
+        <ErrorBoundary fallback={<div>Remote 1 currently unavailable</div>}>
+          <Suspense fallback={<div>Loading Remote 1...</div>}>
+            <Remote1Widget />
+          </Suspense>
+        </ErrorBoundary>
       </div>
 
       <div style={boxStyle}>
         <h2>Remote 2</h2>
-        <Suspense fallback={<div>Loading Remote 2...</div>}>
-          <Remote2Widget />
-        </Suspense>
+        <ErrorBoundary fallback={<div>Remote 2 currently unavailable</div>}>
+          <Suspense fallback={<div>Loading Remote 2...</div>}>
+            <Remote2Widget />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   );
