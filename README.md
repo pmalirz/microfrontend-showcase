@@ -4,11 +4,12 @@ Learning showcase: React microfrontends with Webpack Module Federation + Spring 
 
 ## Structure
 
-- `frontend/host` - shell/host app
-- `frontend/remote1` - federated module A
-- `frontend/remote2` - federated module B
-- `backend/service-a` - REST API for Remote A
-- `backend/service-b` - REST API for Remote B
+- `frontend/host` - shell/host app (Port 3000)
+- `frontend/registry` - module federation gateway (Port 3003)
+- `frontend/remote1` - federated module A (Port 3001)
+- `frontend/remote2` - federated module B (Port 3002)
+- `backend/service-a` - REST API for Remote A (Port 8081)
+- `backend/service-b` - REST API for Remote B (Port 8082)
 
 ## Run (dev)
 
@@ -16,7 +17,7 @@ Learning showcase: React microfrontends with Webpack Module Federation + Spring 
 
 1. One-time install:
    - `npm run install:all`
-2. Start all MFEs:
+2. Start all MFEs (Host, Remotes, Registry):
    - `npm run dev`
 3. Open `http://localhost:3000`
 
@@ -61,8 +62,11 @@ Key ideas:
 Runtime flow:
 
 - Start the remotes; each serves `remoteEntry.js` on its dev server.
-- Start the host; it references the remotes via URLs in `webpack.config.js`.
-- When the host renders a remote component, Webpack fetches the remote container and executes the exposed module.
+- Start the registry; it listens for requests and holds the mapping of `scope -> url` (Port 3003).
+- Start the host; it references the remotes via the Registry URL (e.g., `localhost:3003/remote1/...`).
+- When the host renders a remote component, Webpack requests the script from the Registry.
+- The Registry responds with a `302 Found` redirect to the actual Remote URL.
+- The browser fetches the remote container from the redirected URL and executes the exposed module.
 - The remote component fetches data from its backend service.
 
 ### Sequence Diagram (Bootstrap + Runtime Load)
@@ -71,22 +75,34 @@ Runtime flow:
 sequenceDiagram
   autonumber
   participant Browser
-  participant HostDev as Host Dev Server
-  participant Remote1 as Remote1 Dev Server
-  participant Remote2 as Remote2 Dev Server
-  participant SvcA as Service A (Spring)
-  participant SvcB as Service B (Spring)
+  participant HostDev as Host (3000)
+  participant Registry as Registry (3003)
+  participant Remote1 as Remote1 (3001)
+  participant Remote2 as Remote2 (3002)
+  participant SvcA as Service A (8081)
+  participant SvcB as Service B (8082)
 
   Browser->>HostDev: GET / (index.html + host bundle)
   HostDev-->>Browser: host bundle (includes MF runtime)
+  
+  %% Remote 1 Loading via Registry
+  Browser->>Registry: GET /remote1/remoteEntry.js
+  Registry-->>Browser: 302 Redirect -> http://localhost:3001/remoteEntry.js
   Browser->>Remote1: GET /remoteEntry.js
   Remote1-->>Browser: remote1 container
+
+  %% Remote 2 Loading via Registry
+  Browser->>Registry: GET /remote2/remoteEntry.js
+  Registry-->>Browser: 302 Redirect -> http://localhost:3002/remoteEntry.js
   Browser->>Remote2: GET /remoteEntry.js
   Remote2-->>Browser: remote2 container
+
+  %% Execution & Data Fetching
   Browser->>Remote1: load exposed module remote1/Widget
   Remote1-->>Browser: Widget module
   Browser->>Remote2: load exposed module remote2/Widget
   Remote2-->>Browser: Widget module
+  
   Browser->>SvcA: GET /api/a/hello
   SvcA-->>Browser: JSON message
   Browser->>SvcB: GET /api/b/hello
