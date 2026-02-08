@@ -21,8 +21,9 @@ Learning showcase: React microfrontends with Webpack Module Federation + Spring 
 
 1. One-time install:
    - `npm run install:all`
-2. Start all MFEs (Host, Remotes, Registry):
-   - `npm run dev`
+2. Start all MFEs (Host, Remotes, Registry) and Backend Services:
+   - `npm run dev:all`
+   - On Windows: `npm run dev:all:win`
 3. Open `http://localhost:3000`
 
 ### Backend
