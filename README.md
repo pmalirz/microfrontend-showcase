@@ -5,9 +5,10 @@ Learning showcase: React microfrontends with Webpack Module Federation + Spring 
 ## Structure
 
 - `frontend/host` - shell/host app (Port 3000)
-- `frontend/registry` - module federation gateway (Port 3003)
+- `frontend/registry` - module federation gateway (Port 3020)
 - `frontend/remote1` - federated module A (Port 3001)
 - `frontend/remote2` - federated module B (Port 3002)
+- `frontend/shared-ui` - shared ui library (Port 3011)
 - `backend/service-a` - REST API for Remote A (Port 8081)
 - `backend/service-b` - REST API for Remote B (Port 8082)
 
@@ -62,8 +63,8 @@ Key ideas:
 Runtime flow:
 
 - Start the remotes; each serves `remoteEntry.js` on its dev server.
-- Start the registry; it listens for requests and holds the mapping of `scope -> url` (Port 3003).
-- Start the host; it references the remotes via the Registry URL (e.g., `localhost:3003/remote1/...`).
+- Start the registry; it listens for requests and holds the mapping of `scope -> url` (Port 3020).
+- Start the host; it references the remotes via the Registry URL (e.g., `localhost:3020/remote1/...`).
 - When the host renders a remote component, Webpack requests the script from the Registry.
 - The Registry responds with a `302 Found` redirect to the actual Remote URL.
 - The browser fetches the remote container from the redirected URL and executes the exposed module.
@@ -76,7 +77,7 @@ sequenceDiagram
   autonumber
   participant Browser
   participant HostDev as Host (3000)
-  participant Registry as Registry (3003)
+  participant Registry as Registry (3020)
   participant Remote1 as Remote1 (3001)
   participant Remote2 as Remote2 (3002)
   participant SvcA as Service A (8081)
@@ -117,7 +118,7 @@ Instead of hardcoding remote URLs in the Host application, the Host points to th
 
 ### How It Works
 
-1. **Request**: The Host application requests a remote entry file from the Registry (e.g., `http://localhost:3003/remote1/remoteEntry.js`).
+1. **Request**: The Host application requests a remote entry file from the Registry (e.g., `http://localhost:3020/remote1/remoteEntry.js`).
 2. **Resolution**: The Registry looks up its configuration (`frontend/registry/config.json`) to determine the current active URL for `remote1` (e.g., `http://localhost:3001/remoteEntry.js`).
 3. **Redirect**: The Registry responds with a `302 Found` redirect, sending the browser to the actual location.
 
@@ -150,4 +151,35 @@ The mapping is defined in `frontend/registry/config.json`:
 }
 ```
 
-Updating this file typically applies changes immediately (depending on caching strategies).
+## Shared UI Library (Vite Integration)
+
+Added a `shared-ui` package (`frontend/shared-ui`) which demonstrates **mixing build tools** (Webpack + Vite) in a single Module Federation architecture.
+
+- **Stack**: React + Vite + `@originjs/vite-plugin-federation`.
+- **Purpose**: Exposes reusable components (e.g., `SharedButton`) to other remotes.
+- **Port**: 3011 (Preview mode).
+
+### Key Technical Details
+
+1. **Vite vs Webpack**:
+    - `shared-ui` uses Vite for lightning-fast development.
+    - Other apps (Host, Remote1, Remote2) use Webpack 5.
+    - We use `@originjs/vite-plugin-federation` to make Vite output compatible with Webpack's Module Federation.
+
+2. **Promise-based Loading**:
+    - Since Vite outputs **ESM** (ECMAScript Modules) and Webpack remotes typically expect `var` global injection (MF v1), consuming a Vite remote in Webpack requires a **Promise-based import**:
+
+      ```javascript
+      // webpack.config.js in Remote1
+      remotes: {
+        sharedUI: `promise new Promise(resolve => {
+          import("http://localhost:3020/sharedUI/remoteEntry.js").then(remote => {
+            resolve(remote)
+          })
+        })`
+      }
+      ```
+
+3. **Registry Integration**:
+    - The `shared-ui` is also routed through the **Registry Gateway** (port 3020).
+    - `remote1` requests `http://localhost:3020/sharedUI/remoteEntry.js` -> redirects to `http://localhost:3011/assets/remoteEntry.js`.

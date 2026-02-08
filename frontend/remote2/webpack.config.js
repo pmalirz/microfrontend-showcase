@@ -10,7 +10,7 @@ module.exports = {
     historyApiFallback: true,
   },
   output: {
-    publicPath: "auto",
+    publicPath: "http://localhost:3002/",
     clean: true,
   },
   resolve: {
@@ -36,6 +36,15 @@ module.exports = {
       filename: "remoteEntry.js",
       exposes: {
         "./Widget": "./src/Widget",
+      },
+      remotes: {
+        sharedUI: `promise new Promise(resolve => {
+          // This requires the host to be module-capable or use a script tag
+          // But since Vite outputs ESM, we use import()
+          import("http://localhost:3020/sharedUI/remoteEntry.js").then(remote => {
+            resolve(remote)
+          })
+        })`
       },
       shared: {
         react: { singleton: true, requiredVersion: false },

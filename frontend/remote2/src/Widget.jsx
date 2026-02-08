@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
+
+const SharedButton = React.lazy(() => import("sharedUI/SharedButton"));
 
 export default function Widget() {
   const [message, setMessage] = useState("Loading...");
@@ -14,6 +16,11 @@ export default function Widget() {
     <div>
       <div>Remote 2 widget</div>
       <div>Service B says: {message}</div>
+      <div style={{ marginTop: '10px' }}>
+        <Suspense fallback={<div>Loading Button...</div>}>
+          <SharedButton>Hello from Vite!</SharedButton>
+        </Suspense>
+      </div>
     </div>
   );
 }
