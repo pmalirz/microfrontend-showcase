@@ -1,5 +1,6 @@
 # Compiled output
 dist/
+storybook-static/
 build/
 target/
 out/
