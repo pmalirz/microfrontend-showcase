@@ -1,5 +1,11 @@
 import React from 'react';
 
+/**
+ * A universal button that changes its background color to a random one when clicked.
+ * 
+ * @param {Object} props - Component properties.
+ * @param {React.ReactNode} props.children - Content to be displayed inside the button.
+ */
 const SharedButton = ({ children }) => {
     const [bgColor, setBgColor] = React.useState('blue');
 

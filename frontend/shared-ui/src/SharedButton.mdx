@@ -1,0 +1,26 @@
+import { Meta, Title, Primary, Controls, Story } from '@storybook/blocks';
+import * as SharedButtonStories from './SharedButton.stories';
+
+<Meta of={SharedButtonStories} />
+
+<Title>SharedButton</Title>
+
+This is the dedicated documentation for the `SharedButton` component, written in **MDX**.
+
+### When to use?
+Use this button when you want to provide user interaction with visual feedback through color changes.
+
+<Primary />
+
+### Properties (Props)
+Storybook automatically extracts descriptions from JSDoc comments in the component's source code.
+
+<Controls />
+
+### Examples
+
+#### Standard
+<Story of={SharedButtonStories.Primary} />
+
+#### With Icon/Emoji
+<Story of={SharedButtonStories.Secondary} />
