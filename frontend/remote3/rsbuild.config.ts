@@ -1,48 +1,58 @@
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
-import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
+import pkg from './package.json';
+
+const deps = pkg.dependencies;
 
 export default defineConfig({
     plugins: [
         pluginReact(),
-        pluginModuleFederation({
-            name: 'remote3',
-            filename: 'remoteEntry.js',
-            exposes: {
-                './Widget': './src/Widget.tsx',
-            },
-            remotes: {
-                sharedUI: `promise new Promise((resolve, reject) => {
-                    const url = 'http://localhost:3020/sharedUI/remoteEntry.js';
-                    import(url)
-                        .then(module => resolve(module))
-                        .catch(err => reject(err));
-                })`
-            },
-            shared: {
-                react: {
-                    singleton: true,
-                    requiredVersion: false,
-                },
-                'react-dom': {
-                    singleton: true,
-                    requiredVersion: false,
-                },
-            },
-        }),
     ],
     server: {
         port: 3003,
     },
     tools: {
-        rspack: {
-            output: {
+        rspack: (config, { rspack }) => {
+            config.output = {
+                ...config.output,
                 publicPath: 'http://localhost:3003/',
-                library: {
+                uniqueName: 'remote3',
+            };
+
+            // Explicitly set library type for Webpack interop
+            if (config.output && !config.output.library) {
+                config.output.library = {
                     name: 'remote3',
                     type: 'var',
-                }
+                };
             }
+
+            config.plugins?.push(new rspack.container.ModuleFederationPlugin({
+                name: 'remote3',
+                filename: 'remoteEntry.js',
+                exposes: {
+                    './Widget': './src/Widget.tsx',
+                },
+                remotes: {
+                    sharedUI: `promise new Promise((resolve, reject) => {
+                        const url = 'http://localhost:3020/sharedUI/remoteEntry.js';
+                        import(url)
+                            .then(module => resolve(module))
+                            .catch(err => reject(err));
+                    })`
+                },
+                shared: {
+                    react: {
+                        singleton: true,
+                        requiredVersion: deps.react,
+                    },
+                    'react-dom': {
+                        singleton: true,
+                        requiredVersion: deps['react-dom'],
+                    },
+                },
+            }));
+            return config;
         }
     }
 });

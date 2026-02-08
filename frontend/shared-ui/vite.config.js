@@ -1,6 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
+import pkg from './package.json' assert { type: 'json' };
+
+const deps = pkg.dependencies;
 
 export default defineConfig({
     plugins: [
@@ -11,7 +14,16 @@ export default defineConfig({
             exposes: {
                 './SharedButton': './src/SharedButton.jsx',
             },
-            shared: ['react', 'react-dom']
+            shared: {
+                react: {
+                    requiredVersion: deps.react,
+                    singleton: true,
+                },
+                'react-dom': {
+                    requiredVersion: deps['react-dom'],
+                    singleton: true,
+                }
+            }
         }),
     ],
     build: {
