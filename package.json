@@ -9,7 +9,9 @@
     "dev": "concurrently -n \"shared-ui,remote1,remote2,remote3,host\" -c \"gray,cyan,magenta,yellow,green\" \"npm --prefix frontend/shared-ui run build && npm --prefix frontend/shared-ui run preview\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/remote3 run dev\" \"npm --prefix frontend/host run dev\"",
     "dev:all": "concurrently -n \"registry,shared-ui,remote1,remote2,remote3,host,svc-a,svc-b\" -c \"white,gray,cyan,magenta,yellow,green,red,blue\" \"npm --prefix frontend/registry run dev\" \"npm --prefix frontend/shared-ui run build && npm --prefix frontend/shared-ui run preview\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/remote3 run dev\" \"npm --prefix frontend/host run dev\" \"./gradlew -p backend/service-a bootRun\" \"./gradlew -p backend/service-b bootRun\"",
     "dev:all:win": "concurrently -n \"registry,shared-ui,remote1,remote2,remote3,host,svc-a,svc-b\" -c \"white,gray,cyan,magenta,yellow,green,red,blue\" \"cmd /c npm --prefix frontend/registry run dev\" \"cmd /c npm --prefix frontend/shared-ui run build && cmd /c npm --prefix frontend/shared-ui run preview\" \"cmd /c npm --prefix frontend/remote1 run dev\" \"cmd /c npm --prefix frontend/remote2 run dev\" \"cmd /c npm --prefix frontend/remote3 run dev\" \"cmd /c npm --prefix frontend/host run dev\" \"cmd /c gradlew.bat -p backend/service-a bootRun\" \"cmd /c gradlew.bat -p backend/service-b bootRun\"",
-    "stop": "npx kill-port 3000 3001 3002 3003 3020 3011 8081 8082"
+    "stop": "npx kill-port 3000 3001 3002 3003 3020 3011 8081 8082",
+    "typecheck:all": "npm --prefix frontend/shared-ui run typecheck && npm --prefix frontend/remote1 run typecheck && npm --prefix frontend/remote2 run typecheck",
+    "verify-contracts": "echo Checking type contracts... && npm run typecheck:all && echo ✅ All contracts verified!"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

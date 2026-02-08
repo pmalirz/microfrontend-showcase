@@ -12,7 +12,7 @@ export default defineConfig({
             name: 'sharedUI',
             filename: 'remoteEntry.js',
             exposes: {
-                './SharedButton': './src/SharedButton.jsx',
+                './SharedButton': './src/SharedButton.tsx',
             },
             shared: {
                 react: {

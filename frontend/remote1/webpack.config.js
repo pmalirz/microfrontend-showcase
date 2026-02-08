@@ -15,17 +15,23 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    extensions: [".js", ".jsx"],
+    // Dodano obsługę .ts i .tsx
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        // Dodano obsługę TypeScript
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: [
+              "@babel/preset-env",
+              "@babel/preset-react",
+              "@babel/preset-typescript"
+            ],
           },
         },
       },
@@ -37,15 +43,14 @@ module.exports = {
       filename: "remoteEntry.js",
       remotes: {
         sharedUI: `promise new Promise(resolve => {
-          // This requires the host to be module-capable or use a script tag
-          // But since Vite outputs ESM, we use import()
           import("http://localhost:3020/sharedUI/remoteEntry.js").then(remote => {
             resolve(remote)
           })
         })`
       },
       exposes: {
-        "./Widget": "./src/Widget",
+        // Zmieniono na .tsx
+        "./Widget": "./src/Widget.tsx",
       },
       shared: {
         react: { singleton: true, requiredVersion: deps.react },
