@@ -3,6 +3,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 const Remote1Widget = React.lazy(() => import("remote1/Widget"));
 const Remote2Widget = React.lazy(() => import("remote2/Widget"));
+const Remote3Widget = React.lazy(() => import("remote3/Widget"));
 
 const boxStyle = {
   padding: 16,
@@ -21,7 +22,7 @@ export default function App() {
       </p>
 
       <div style={boxStyle}>
-        <h2>Remote 1</h2>
+        <h2>Remote 1 (host frame)</h2>
         <ErrorBoundary fallback={<div>Remote 1 currently unavailable</div>}>
           <Suspense fallback={<div>Loading Remote 1...</div>}>
             <Remote1Widget />
@@ -30,13 +31,23 @@ export default function App() {
       </div>
 
       <div style={boxStyle}>
-        <h2>Remote 2</h2>
+        <h2>Remote 2 (host frame)</h2>
         <ErrorBoundary fallback={<div>Remote 2 currently unavailable</div>}>
           <Suspense fallback={<div>Loading Remote 2...</div>}>
             <Remote2Widget />
           </Suspense>
         </ErrorBoundary>
       </div>
+
+      <div style={boxStyle}>
+        <h2>Remote 3 (host frame)</h2>
+        <ErrorBoundary fallback={<div>Remote 3 currently unavailable</div>}>
+          <Suspense fallback={<div>Loading Remote 3...</div>}>
+            <Remote3Widget />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+
     </div>
   );
 }

@@ -36,6 +36,7 @@ module.exports = {
       remotes: {
         remote1: "remote1@http://localhost:3020/remote1/remoteEntry.js",
         remote2: "remote2@http://localhost:3020/remote2/remoteEntry.js",
+        remote3: "remote3@http://localhost:3020/remote3/remoteEntry.js",
       },
       shared: {
         react: { singleton: true, requiredVersion: false },

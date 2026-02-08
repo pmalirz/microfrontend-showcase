@@ -1,0 +1,21 @@
+{
+    "name": "remote3",
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "rsbuild dev",
+        "build": "rsbuild build",
+        "preview": "rsbuild preview"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@module-federation/rsbuild-plugin": "^2.0.0",
+        "@rsbuild/core": "2.0.0-alpha.3",
+        "@rsbuild/plugin-react": "2.0.0-alpha.3",
+        "@types/react": "^19.2.13",
+        "@types/react-dom": "^19.2.3",
+        "typescript": "^5.9.3"
+    }
+}

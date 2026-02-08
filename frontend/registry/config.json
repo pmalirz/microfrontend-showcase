@@ -1,5 +1,6 @@
 {
     "remote1": "http://localhost:3001/remoteEntry.js",
     "remote2": "http://localhost:3002/remoteEntry.js",
-    "sharedUI": "http://localhost:3011/assets/remoteEntry.js"
+    "sharedUI": "http://localhost:3011/assets/remoteEntry.js",
+    "remote3": "http://localhost:3003/remoteEntry.js"
 }

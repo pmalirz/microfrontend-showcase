@@ -2,13 +2,16 @@
 
 Learning showcase: React microfrontends with Webpack Module Federation + Spring Boot microservices.
 
+> **⚠️ Alert**: **Remote 3** uses **Rsbuild (Rspack)** which is currently in an **Alpha/Beta** integration phase. APIs and plugin compatibility for this specific remote are subject to change. The Host, Registry, and other Remotes use stable Webpack 5 or Vite.
+
 ## Structure
 
-- `frontend/host` - shell/host app (Port 3000)
-- `frontend/registry` - module federation gateway (Port 3020)
-- `frontend/remote1` - federated module A (Port 3001)
-- `frontend/remote2` - federated module B (Port 3002)
-- `frontend/shared-ui` - shared ui library (Port 3011)
+- `frontend/host` - **Webpack 5** shell/host app (Port 3000)
+- `frontend/registry` - **Express** module federation gateway (Port 3020)
+- `frontend/remote1` - **Webpack 5** federated module A (Port 3001)
+- `frontend/remote2` - **Webpack 5** federated module B (Port 3002)
+- `frontend/remote3` - **Rsbuild (Rspack)** federated module C (Port 3003)
+- `frontend/shared-ui` - **Vite** shared ui library (Port 3011)
 - `backend/service-a` - REST API for Remote A (Port 8081)
 - `backend/service-b` - REST API for Remote B (Port 8082)
 
@@ -47,6 +50,26 @@ Learning showcase: React microfrontends with Webpack Module Federation + Spring 
 
 - This POC keeps things intentionally small and explicit for learning.
 - CORS is enabled in both services for local development.
+
+## 🛠️ Mixed Bundler Ecosystem
+
+This project demonstrates a powerful capability of Module Federation: **Interoperability between different build tools.**
+
+We successfully mix **Webpack**, **Vite**, and **Rsbuild (Rspack)** in a single federated application:
+
+| App | Role | Bundler | Tech Stack |
+| :--- | :--- | :--- | :--- |
+| **Host** | Shell/Consumer | **Webpack 5** | React 18 |
+| **Remote 1** | Feature A | **Webpack 5** | React 18 |
+| **Remote 2** | Feature B | **Webpack 5** | React 18 |
+| **Remote 3** | Feature C | **Rsbuild (Rspack)** | React 18, TypeScript |
+| **Shared UI** | Component Lib | **Vite** | React 18 |
+
+### Integration Details
+
+- **Webpack Hosts** consume **Rsbuild** and **Vite** remotes using `promise new Promise(...)` dynamic imports or standard MF 2.0 loading logic.
+- **Rsbuild (Rspack)** provides extremely fast builds while maintaining compatibility.
+- **Micro-Frontends** allows teams to choose their preferred tools without locking the entire architecture to one bundler.
 
 ## How It Works (Technical Overview)
 
@@ -147,7 +170,9 @@ The mapping is defined in `frontend/registry/config.json`:
 ```json
 {
   "remote1": "http://localhost:3001/remoteEntry.js",
-  "remote2": "http://localhost:3002/remoteEntry.js"
+  "remote2": "http://localhost:3002/remoteEntry.js",
+  "remote3": "http://localhost:3003/remoteEntry.js",
+  "sharedUI": "http://localhost:3011/remoteEntry.js"
 }
 ```
 
