@@ -93,6 +93,59 @@ Runtime flow:
 - The browser fetches the remote container from the redirected URL and executes the exposed module.
 - The remote component fetches data from its backend service.
 
+## System Architecture
+
+The following graph illustrates the container architecture, highlighting the technology stack for each module and their communication patterns (C4 Container View style).
+
+```mermaid
+graph TB
+    %% Stylings
+    classDef person fill:#08427b,stroke:#052e56,color:#fff,stroke-width:2px;
+    classDef internalContainer fill:#1168bd,stroke:#0b4884,color:#fff,stroke-width:2px;
+    classDef externalSystem fill:#999,stroke:#666,color:#fff,stroke-width:2px;
+    
+    %% Actors
+    Person((User)):::person
+
+    %% Frontend System
+    subgraph Frontend_System [Frontend Layer]
+        direction TB
+        
+        Host["Host App | Webpack 5, React 18 | Main Shell"]:::internalContainer
+        Registry["Registry Service | Node.js, Express | Module Gateway"]:::internalContainer
+        Shared["Shared UI | Vite, React 18 | Component Library"]:::internalContainer
+        
+        subgraph Remotes [Feature Modules]
+            direction LR
+            R1["Remote 1 | Webpack 5 | Feature A"]:::internalContainer
+            R2["Remote 2 | Webpack 5 | Feature B"]:::internalContainer
+            R3["Remote 3 | Rsbuild/Rspack | Feature C"]:::internalContainer
+        end
+    end
+
+    %% Backend System
+    subgraph Backend_System [Backend Layer]
+        direction LR
+        SvcA["Service A | Spring Boot, Java 17 | REST API"]:::internalContainer
+        SvcB["Service B | Spring Boot, Java 17 | REST API"]:::internalContainer
+    end
+
+    %% Relationships
+    Person -->|Visits| Host
+    Host --> Registry
+    
+    Host -->|Lazy Loads| R1
+    Host -->|Lazy Loads| R2
+    Host -->|Lazy Loads| R3
+    
+    R1 -.->|Imports| Shared
+    R2 -.->|Imports| Shared
+    R3 -.->|Imports| Shared
+    
+    R1 -->|REST| SvcA
+    R2 -->|REST| SvcB
+```
+
 ### Sequence Diagram (Bootstrap + Runtime Load)
 
 ```mermaid
