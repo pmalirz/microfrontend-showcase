@@ -1,4 +1,4 @@
-# Grozny Microfrontend POC
+# MicroFrontendShowcase POC
 
 Learning showcase: React microfrontends with Webpack Module Federation + Spring Boot microservices.
 
