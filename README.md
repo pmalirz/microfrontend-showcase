@@ -1,6 +1,6 @@
-# MicroFrontendShowcase POC
+# MicroFrontend Showcase
 
-Learning showcase: React microfrontends with Webpack Module Federation + Spring Boot microservices.
+React microfrontends with Webpack / Vite / RsbuildModule Federation + Spring Boot microservices.
 
 > **⚠️ Alert**: **Remote 3** uses **Rsbuild (Rspack)** which is currently in an **Alpha/Beta** integration phase. APIs and plugin compatibility for this specific remote are subject to change. The Host, Registry, and other Remotes use stable Webpack 5 or Vite.
 
