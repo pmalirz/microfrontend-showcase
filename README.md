@@ -1,5 +1,19 @@
 # MicroFrontend Showcase
 
+<div align="center">
+
+![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=flat&logo=springboot&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat&logo=openjdk&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat&logo=typescript&logoColor=white)
+
+![Webpack](https://img.shields.io/badge/Webpack-5-8DD6F9?style=flat&logo=webpack&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-Bundler-646CFF?style=flat&logo=vite&logoColor=white)
+![Rsbuild](https://img.shields.io/badge/Rsbuild-Alpha-orange?style=flat)
+![Module Federation](https://img.shields.io/badge/Module_Federation-Enabled-blue?style=flat)
+
+</div>
+
 React microfrontends with Webpack / Vite / RsbuildModule Federation + Spring Boot microservices.
 
 > **⚠️ Alert**: **Remote 3** uses **Rsbuild (Rspack)** which is currently in an **Alpha/Beta** integration phase. APIs and plugin compatibility for this specific remote are subject to change. The Host, Registry, and other Remotes use stable Webpack 5 or Vite.
