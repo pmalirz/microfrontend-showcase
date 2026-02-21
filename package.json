@@ -11,6 +11,7 @@
     "dev:all:win": "moon run :dev",
     "stop": "npx kill-port 3000 3001 3002 3003 3020 3011 8081 8082",
     "typecheck:all": "moon run :typecheck",
+    "build:all": "moon run :build",
     "verify-contracts": "moon run :typecheck && echo ✅ All contracts verified!"
   },
   "devDependencies": {
