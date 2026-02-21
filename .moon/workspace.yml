@@ -1,0 +1,12 @@
+$schema: 'https://moonrepo.dev/schemas/workspace.json'
+
+projects:
+  registry: "frontend/registry"
+  host: "frontend/host"
+  remote1: "frontend/remote1"
+  remote2: "frontend/remote2"
+  remote3: "frontend/remote3"
+  shared-ui: "frontend/shared-ui"
+  service-a: "backend/service-a"
+  service-b: "backend/service-b"
+

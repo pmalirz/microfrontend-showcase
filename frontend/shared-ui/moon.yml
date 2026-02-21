@@ -1,0 +1,9 @@
+language: "javascript"
+
+tasks:
+  dev:
+    script: "npm run build && npm run preview"
+  typecheck:
+    command: "npm run typecheck"
+  build:
+    command: "npm run build"

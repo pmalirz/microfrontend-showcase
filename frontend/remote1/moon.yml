@@ -1,0 +1,7 @@
+language: "javascript"
+
+tasks:
+  dev:
+    command: "npm run dev"
+  typecheck:
+    command: "npm run typecheck"

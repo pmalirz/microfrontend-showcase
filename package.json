@@ -6,14 +6,15 @@
     "install:all": "npm install && npm --prefix frontend/registry install && npm --prefix frontend/host install && npm --prefix frontend/remote1 install && npm --prefix frontend/remote2 install && npm --prefix frontend/shared-ui install && npm --prefix frontend/remote3 install --legacy-peer-deps",
     "clean": "powershell -Command \"@('.', 'frontend/registry', 'frontend/host', 'frontend/remote1', 'frontend/remote2', 'frontend/shared-ui', 'frontend/remote3') | ForEach-Object { $path = Join-Path $_ 'node_modules'; if (Test-Path $path) { Write-Host 'Removing '$path; Remove-Item -Recurse -Force $path }; $lock = Join-Path $_ 'package-lock.json'; if (Test-Path $lock) { Write-Host 'Removing '$lock; Remove-Item -Force $lock } }\"",
     "reinstall": "npm run clean && npm run install:all",
-    "dev": "concurrently -n \"shared-ui,remote1,remote2,remote3,host\" -c \"gray,cyan,magenta,yellow,green\" \"npm --prefix frontend/shared-ui run build && npm --prefix frontend/shared-ui run preview\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/remote3 run dev\" \"npm --prefix frontend/host run dev\"",
-    "dev:all": "concurrently -n \"registry,shared-ui,remote1,remote2,remote3,host,svc-a,svc-b\" -c \"white,gray,cyan,magenta,yellow,green,red,blue\" \"npm --prefix frontend/registry run dev\" \"npm --prefix frontend/shared-ui run build && npm --prefix frontend/shared-ui run preview\" \"npm --prefix frontend/remote1 run dev\" \"npm --prefix frontend/remote2 run dev\" \"npm --prefix frontend/remote3 run dev\" \"npm --prefix frontend/host run dev\" \"./gradlew -p backend/service-a bootRun\" \"./gradlew -p backend/service-b bootRun\"",
-    "dev:all:win": "concurrently -n \"registry,shared-ui,remote1,remote2,remote3,host,svc-a,svc-b\" -c \"white,gray,cyan,magenta,yellow,green,red,blue\" \"cmd /c npm --prefix frontend/registry run dev\" \"cmd /c npm --prefix frontend/shared-ui run build && cmd /c npm --prefix frontend/shared-ui run preview\" \"cmd /c npm --prefix frontend/remote1 run dev\" \"cmd /c npm --prefix frontend/remote2 run dev\" \"cmd /c npm --prefix frontend/remote3 run dev\" \"cmd /c npm --prefix frontend/host run dev\" \"cmd /c gradlew.bat -p backend/service-a bootRun\" \"cmd /c gradlew.bat -p backend/service-b bootRun\"",
+    "dev": "moon run host:dev remote1:dev remote2:dev remote3:dev shared-ui:dev",
+    "dev:all": "moon run :dev",
+    "dev:all:win": "moon run :dev",
     "stop": "npx kill-port 3000 3001 3002 3003 3020 3011 8081 8082",
-    "typecheck:all": "npm --prefix frontend/shared-ui run typecheck && npm --prefix frontend/remote1 run typecheck && npm --prefix frontend/remote2 run typecheck",
-    "verify-contracts": "echo Checking type contracts... && npm run typecheck:all && echo ✅ All contracts verified!"
+    "typecheck:all": "moon run :typecheck",
+    "verify-contracts": "moon run :typecheck && echo ✅ All contracts verified!"
   },
   "devDependencies": {
+    "@moonrepo/cli": "^2.0.1",
     "concurrently": "^8.2.2",
     "kill-port": "^2.0.1"
   }
